@@ -1,3 +1,6 @@
 [submodule "thirdparty/portaudio"]
 	path = thirdparty/portaudio
 	url = https://github.com/PortAudio/portaudio.git
+[submodule "thirdparty/bln"]
+	path = thirdparty/bln
+	url = https://github.com/franklange/bln.git
