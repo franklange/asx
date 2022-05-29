@@ -4,3 +4,6 @@
 [submodule "thirdparty/bln"]
 	path = thirdparty/bln
 	url = https://github.com/franklange/bln.git
+[submodule "thirdparty/libsndfile"]
+	path = thirdparty/libsndfile
+	url = https://github.com/libsndfile/libsndfile.git
