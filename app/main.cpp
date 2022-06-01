@@ -3,10 +3,28 @@
 #include <asx/wav.hpp>
 
 #include <chrono>
+#include <string>
 #include <thread>
+#include <utility>
 
 using namespace asx;
 using namespace std::chrono_literals;
+
+void cmdline(PortAudioSink& s)
+{
+    std::string input;
+
+    while (std::getline(std::cin, input))
+    {
+        if (input == "q")
+            break;
+
+        if (input == "")
+            s.toggle();
+    }
+
+    s.stop();
+}
 
 auto main() -> int
 {
@@ -18,8 +36,11 @@ auto main() -> int
     for (auto& buf : track)
         q.put(std::move(buf));
 
-    sink.start();
-    sink.wait();
+    std::thread cliRunner{cmdline, std::ref(sink)};
+
+    sink.finish();
+
+    cliRunner.join();
 
     return 0;
 }
