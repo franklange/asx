@@ -1,6 +1,6 @@
 #pragma once
 
-#include <asx/audio_settings.hpp>
+#include <asx/audio.hpp>
 
 #include <filesystem>
 #include <vector>

@@ -1,46 +1,26 @@
+#include "cmdline.hpp"
+
+#include <asx/actions.hpp>
+#include <asx/playback_worker.hpp>
 #include <asx/queue.hpp>
 #include <asx/sink_portaudio.hpp>
 #include <asx/wav.hpp>
 
-#include <chrono>
-#include <string>
-#include <thread>
-#include <utility>
-
 using namespace asx;
-using namespace std::chrono_literals;
-
-void cmdline(PortAudioSink& s)
-{
-    std::string input;
-
-    while (std::getline(std::cin, input))
-    {
-        if (input == "q")
-            break;
-
-        if (input == "")
-            s.toggle();
-    }
-
-    s.stop();
-}
+using namespace app;
 
 auto main() -> int
 {
-    AudioQueue q;
-    PortAudioSink sink{q};
+    AudioQueue audio;
 
-    auto track = load_wav("data/piano_f32.wav");
+    PortAudioSink sink{audio};
+    sink.start();
 
-    for (auto& buf : track)
-        q.put(std::move(buf));
+    ActionQueue actions;
+    actions.put(SetTrack{load_wav("data/piano_f32.wav")});
 
-    std::thread cliRunner{cmdline, std::ref(sink)};
-
-    sink.finish();
-
-    cliRunner.join();
+    Cmdline cmdline{actions};
+    PlaybackWorker playback{actions, audio};
 
     return 0;
 }

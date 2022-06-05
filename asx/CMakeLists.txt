@@ -3,11 +3,17 @@ project(asx)
 add_library(${PROJECT_NAME} "")
 
 target_sources(${PROJECT_NAME} PRIVATE
-    include/asx/audio_settings.hpp
+    include/asx/actions.hpp
+    include/asx/audio.hpp
+    include/asx/match.hpp
+    include/asx/playback.hpp
+    include/asx/playback_worker.hpp
     include/asx/queue.hpp
     include/asx/sink_portaudio.hpp
     include/asx/wav.hpp
 
+    src/playback.cpp
+    src/playback_worker.cpp
     src/sink_portaudio.cpp
     src/wav.cpp
 )

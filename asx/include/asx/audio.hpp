@@ -14,7 +14,7 @@ using Sample = float;
 const u16 channels{2};
 const u16 rate{48000};
 
-const u16 bufFrames{2048};
+const u16 bufFrames{1024};
 const u16 bufSamples{bufFrames * channels};
 const u16 bufBytes{bufSamples * sizeof(Sample)};
 
