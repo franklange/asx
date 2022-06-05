@@ -7,11 +7,9 @@ target_sources(${PROJECT_NAME} PRIVATE
     include/asx/queue.hpp
     include/asx/sink.hpp
     include/asx/sink_portaudio.hpp
-    include/asx/sink_validation.hpp
     include/asx/wav.hpp
 
     src/sink_portaudio.cpp
-    src/sink_validation.cpp
     src/wav.cpp
 )
 
