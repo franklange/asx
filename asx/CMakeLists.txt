@@ -5,7 +5,6 @@ add_library(${PROJECT_NAME} "")
 target_sources(${PROJECT_NAME} PRIVATE
     include/asx/audio_settings.hpp
     include/asx/queue.hpp
-    include/asx/sink.hpp
     include/asx/sink_portaudio.hpp
     include/asx/wav.hpp
 
