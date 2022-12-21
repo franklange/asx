@@ -10,3 +10,6 @@
 [submodule "third_party/libsndfile"]
 	path = third_party/libsndfile
 	url = https://github.com/libsndfile/libsndfile.git
+[submodule "third_party/portaudio"]
+	path = third_party/portaudio
+	url = https://github.com/PortAudio/portaudio.git
