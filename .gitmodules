@@ -1,3 +1,6 @@
 [submodule "third_party/bln_log"]
 	path = third_party/bln_log
 	url = https://github.com/franklange/bln_log.git
+[submodule "third_party/bln_queue"]
+	path = third_party/bln_queue
+	url = https://github.com/franklange/bln_queue.git
