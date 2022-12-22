@@ -15,6 +15,8 @@ add_subdirectory(third_party/bln_net)
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 add_compile_options(-Wno-deprecated-declarations)
 
+add_subdirectory(third_party/json)
+
 set(PA_USE_JACK OFF)
 add_subdirectory(third_party/portaudio)
 
@@ -29,7 +31,6 @@ set(ENABLE_PACKAGE_CONFIG OFF)
 set(INSTALL_PKGCONFIG_MODULE OFF)
 add_subdirectory(third_party/libsndfile)
 
-
 # ASX lib
 set(ASX_LIB asx)
 add_library(${ASX_LIB} "")
@@ -39,11 +40,13 @@ set_target_properties(${ASX_LIB} PROPERTIES
 )
 
 target_sources(${ASX_LIB} PRIVATE
+    include/asx/json.hpp
     include/asx/log.hpp
     include/asx/sink.hpp
     include/asx/track.hpp
     include/asx/types.hpp
 
+    src/json.cpp
     src/sink.cpp
     src/track.cpp
 )
@@ -54,5 +57,6 @@ target_compile_features(${ASX_LIB} PUBLIC cxx_std_20)
 target_link_libraries(${ASX_LIB} PUBLIC
     bln_log
     bln_net
+    nlohmann_json
     portaudio
 )
