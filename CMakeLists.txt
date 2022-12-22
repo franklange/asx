@@ -41,12 +41,16 @@ set_target_properties(${ASX_LIB} PROPERTIES
 
 target_sources(${ASX_LIB} PRIVATE
     include/asx/json.hpp
+    include/asx/message.hpp
     include/asx/log.hpp
+    include/asx/server.hpp
     include/asx/sink.hpp
     include/asx/track.hpp
     include/asx/types.hpp
 
     src/json.cpp
+    src/message.cpp
+    src/server.cpp
     src/sink.cpp
     src/track.cpp
 )
@@ -59,4 +63,18 @@ target_link_libraries(${ASX_LIB} PUBLIC
     bln_net
     nlohmann_json
     portaudio
+    sndfile
+)
+
+# ASX daemon
+set(ASXD asxd)
+add_executable(${ASXD} src/daemon.cpp)
+
+set_target_properties(${ASXD} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/"
+)
+
+target_compile_features(${ASXD} PUBLIC cxx_std_20)
+target_link_libraries(${ASXD} PUBLIC
+    asx
 )
