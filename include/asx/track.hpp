@@ -10,7 +10,7 @@ namespace asx {
 
 struct track
 {
-    std::string id;
+    u16         id;
     std::string name;
     segments    data;
 
@@ -21,5 +21,6 @@ using tracks = std::vector<track>;
 
 auto from_wav(const path&) -> track;
 auto to_json(const tracks&) -> json;
+auto to_json(const segment&) -> json;
 
 } // namespace asx

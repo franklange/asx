@@ -16,6 +16,8 @@ auto main() -> int
     for (auto const& file : dir_iter{"./tracks"})
         srv.add_track(asx::from_wav(file));
 
+    asx_log("[daemon] listening on port 8000 ...");
+
     while (true)
         srv.recv();
 

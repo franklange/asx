@@ -2,6 +2,8 @@
 
 #include <bln_net/utils.hpp>
 
+#include <msgpack.hpp>
+
 namespace asx {
 
 auto to_string(const json& j, const int indent) -> std::string
@@ -16,12 +18,12 @@ auto from_string(const std::string& s) -> json
 
 auto to_bytes(const json& j) -> bln_net::bytes
 {
-    return bln_net::to_bytes(to_string(j));
+    return json::to_msgpack(j);
 }
 
 auto from_bytes(const bln_net::bytes& b) -> json
 {
-    return from_string(bln_net::to_string(b));
+    return json::from_msgpack(b);
 }
 
 } // namespace asx

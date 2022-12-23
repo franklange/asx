@@ -1,4 +1,5 @@
 #include <asx/track.hpp>
+#include <asx/log.hpp>
 
 #include <sndfile.h>
 
@@ -16,10 +17,9 @@ auto from_wav(const path& p) -> track
     if (!f)
         throw std::runtime_error{"couldn't open file"};
 
-
     track res;
     res.name = p.stem();
-    res.data.reserve(info.frames / asx::seg_frames);
+    res.data.resize(info.frames / asx::seg_frames);
 
     for (auto& seg : res.data)
         sf_readf_float(f, seg.data(), asx::seg_frames);
@@ -47,6 +47,11 @@ auto to_json(const tracks& ts) -> json
     });
 
     return res;
+}
+
+auto to_json(const segment& s) -> json
+{
+    return {};
 }
 
 } // namespace asx

@@ -36,10 +36,13 @@ sink::sink(audio_queue& q)
 
     if(Pa_OpenDefaultStream(&m_stream, 0, 2, paFloat32, asx::rate, asx::seg_frames, process_cb, this))
         throw std::runtime_error{"pa open stream"};
+
+    Pa_StartStream(m_stream);
 }
 
 sink::~sink()
 {
+    Pa_StopStream(m_stream);
     Pa_Terminate();
 }
 

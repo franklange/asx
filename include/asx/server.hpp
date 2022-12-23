@@ -1,9 +1,10 @@
 #pragma once
 
-#include <asx/message.hpp>
+#include <asx/protocol.hpp>
 #include <asx/track.hpp>
 #include <asx/types.hpp>
 
+#include <optional>
 #include <string>
 
 namespace asx {
@@ -14,14 +15,12 @@ class server
 public:
     server(socket&);
 
-    auto add_track(track) -> std::string;
-
     void recv();
-    void recv(req_tracks);
-    void recv(req_segment);
 
-    void send(rep_tracks);
-    void send(rep_segment);
+    void process(req_tracks);
+    void process(req_segment);
+
+    auto add_track(track) -> u16;
 
 private:
     socket& m_socket;

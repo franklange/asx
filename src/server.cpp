@@ -3,6 +3,7 @@
 
 #include <bln_net/utils.hpp>
 
+#include <cassert>
 #include <utility>
 
 namespace asx {
@@ -11,12 +12,17 @@ server::server(socket& s)
   : m_socket{s}
 {}
 
-auto server::add_track(track t) -> std::string
+auto server::add_track(track t) -> u16
 {
-    t.id = std::to_string(m_tracks.size());
+    const auto id = m_tracks.size();
+
+    t.id = id;
     m_tracks.push_back(std::move(t));
 
-    return m_tracks.back().id;
+    auto& nt = m_tracks.back();
+    asx_dbg("[add_track]", nt.name, nt.data.size());
+
+    return id;
 }
 
 void server::recv()
@@ -24,25 +30,60 @@ void server::recv()
     using namespace std;
 
     auto [remote, bytes] = m_socket.wait();
-    auto [head, body] = unpack_msg(bln_net::to_string(bytes));
+    const json req = from_bytes(bytes);
+
+    const auto& head = req["head"];
+    const auto& body = req["body"];
 
     if (head == req_tracks::name)
-        recv(req_tracks{move(remote)});
+    {
+        auto req = parse_req_tracks(body);
+        if (!req)
+        {
+            asx_log("[recv] [req_tracks] [err] invalid request");
+            return;
+        }
+
+        req.value().client = std::move(remote);
+        process(std::move(req.value()));
+
+        return;
+    }
+
+    if (head == req_segment::name)
+    {
+        auto req = parse_req_segment(body);
+        if (!req)
+        {
+            asx_log("[recv] [req_segment] [err] invalid request");
+            return;
+        }
+
+        req.value().client = std::move(remote);
+        process(std::move(req.value()));
+
+        return;
+    }
+
+    asx_log("[recv] [err]", "unknown message");
 }
 
-void server::recv(req_tracks r)
+void server::process(req_tracks r)
 {
-    asx_dbg("[r|tracks]", r.client.to_string());
-    send(rep_tracks{std::move(r.client), to_json(m_tracks)});
-}
-
-void server::send(rep_tracks r)
-{
-    asx_dbg("[s|tracks]", r.client.to_string(), to_string(r.tracks));
-
     m_socket.put({
         std::move(r.client),
-        bln_net::to_bytes(pack_msg(rep_tracks::name, to_string(r.tracks)))
+        make_rep_tracks(to_json(m_tracks))
+    });
+}
+
+void server::process(req_segment r)
+{
+    m_socket.put({
+        std::move(r.client),
+        make_rep_segment(
+            r.track_id,
+            r.segment_id,
+            m_tracks.at(r.track_id).data.at(r.segment_id))
     });
 }
 
