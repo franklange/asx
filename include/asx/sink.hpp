@@ -11,7 +11,7 @@ public:
     sink(audio_queue&);
     ~sink();
 
-    auto process(float*, u64) -> bool;
+    auto process(sample*, u64) -> bool;
 
 private:
     audio_queue& m_queue;

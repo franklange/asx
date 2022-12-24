@@ -14,7 +14,7 @@ using Flags = PaStreamCallbackFlags;
 
 static auto process_cb(const void*, void* out, const unsigned long frames, const Time*, const Flags, void* data) -> int
 {
-    return static_cast<sink*>(data)->process(static_cast<float*>(out), frames)
+    return static_cast<sink*>(data)->process(static_cast<sample*>(out), frames)
         ? paContinue
         : paComplete;
 }
@@ -34,7 +34,7 @@ sink::sink(audio_queue& q)
     if(pa_quiet_init())
         throw std::runtime_error{"pa init"};
 
-    if(Pa_OpenDefaultStream(&m_stream, 0, 2, paFloat32, asx::rate, asx::seg_frames, process_cb, this))
+    if(Pa_OpenDefaultStream(&m_stream, 0, 2, paInt16, asx::rate, asx::seg_frames, process_cb, this))
         throw std::runtime_error{"pa open stream"};
 
     Pa_StartStream(m_stream);
@@ -46,7 +46,7 @@ sink::~sink()
     Pa_Terminate();
 }
 
-auto sink::process(float* out, const u64 frames) -> bool
+auto sink::process(sample* out, const u64 frames) -> bool
 {
     const auto buf = m_queue.get();
 

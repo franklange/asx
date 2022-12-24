@@ -22,7 +22,7 @@ auto from_wav(const path& p) -> track
     res.data.resize(info.frames / asx::seg_frames);
 
     for (auto& seg : res.data)
-        sf_readf_float(f, seg.data(), asx::seg_frames);
+        sf_readf_short(f, seg.data(), asx::seg_frames);
 
     sf_close(f);
 
