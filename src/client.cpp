@@ -4,38 +4,35 @@
 #include <bln_net/utils.hpp>
 
 #include <cctype>
+#include <string_view>
 
 namespace asx {
 
 namespace {
 
-auto is_tid(const std::string& s) -> bool
+auto is_tid(const std::string_view s) -> bool
 {
-    return (s.size() == 1) && std::isdigit(s.at(0));
+    return (s.size() == 1) && std::isdigit(static_cast<unsigned char>(s.at(0)));
 }
 
-auto is_stop(const std::string& s) -> bool
+auto is_stop(const std::string_view s) -> bool
 {
     return ((s == "pause") || (s == "stop"));
 }
 
 } // namespace anonym
 
-client::client(socket& s, remote r)
-    : m_socket{s}
-    , m_server{std::move(r)}
-{}
-
-void client::request(std::string cmd)
-{
-    asx_dbg("[u]", cmd);
-    m_cmds.put(std::move(cmd));
-}
-
-void client::process_cmds()
+client::client(remote r, socket& s, cmd_queue& c, audio_queue& a)
+    : m_server{r}
+    , m_socket{s}
+    , m_cmds{c}
+    , m_audio{a}
 {
     fetch_tracks();
+}
 
+void client::process_cmd()
+{
     const auto cmd = m_cmds.wait();
 
     if (cmd == "tracks")
@@ -87,6 +84,8 @@ void client::fetch_segments()
         if (pb_info.index >= pb_info.size)
         {
             asx_log("[fetch_segments] done");
+            m_tracks.at(m_tid.value()).index = 0;
+            m_tid.reset();
             return;
         }
 
@@ -159,7 +158,7 @@ void client::handle(rep_tracks& r)
 
 void client::handle(rep_segment& r)
 {
-    m_aq.put(std::move(r.data));
+    m_audio.put(std::move(r.data));
 
     auto& pb_info = m_tracks.at(m_tid.value());
     pb_info.index++;

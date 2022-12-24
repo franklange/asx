@@ -21,16 +21,13 @@ struct playback_info
 
 class client
 {
-    using cmd_queue = bln_queue::msg_queue<std::string>;
     using track_id  = std::optional<u16>;
     using tracks    = std::unordered_map<u16, playback_info>;
 
 public:
-    client(socket&, remote);
+    client(remote, socket&, cmd_queue&, audio_queue&);
 
-    void request(std::string);
-
-    void process_cmds();
+    void process_cmd();
     void fetch_tracks();
     void fetch_segments();
 
@@ -41,19 +38,16 @@ public:
     void handle(rep_segment&);
 
     void update_tracks(const json&);
-
-private:
     auto is_current_track(const rep_segment&) -> bool;
 
-    socket& m_socket;
+private:
     const remote m_server;
 
+    socket& m_socket;
+    cmd_queue& m_cmds;
+    audio_queue& m_audio;
+
     track_id m_tid;
-    cmd_queue m_cmds;
-
-    audio_queue m_aq;
-    sink m_sink{m_aq};
-
     tracks m_tracks;
 };
 

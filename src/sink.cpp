@@ -12,7 +12,7 @@ namespace asx {
 using Time  = PaStreamCallbackTimeInfo;
 using Flags = PaStreamCallbackFlags;
 
-static auto process_cb(const void*, void* out, const unsigned long frames, const Time*, const Flags, void* data) -> int
+static auto process_cb(const void*, void* out, const u64 frames, const Time*, const Flags, void* data) -> int
 {
     return static_cast<sink*>(data)->process(static_cast<sample*>(out), frames)
         ? paContinue
@@ -46,7 +46,7 @@ sink::~sink()
     Pa_Terminate();
 }
 
-auto sink::process(sample* out, const u64 frames) -> bool
+auto sink::process(sample* out, const u64) -> bool
 {
     const auto buf = m_queue.get();
 

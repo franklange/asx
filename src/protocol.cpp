@@ -23,7 +23,7 @@ auto is_segment(const json& j) -> bool
 
 } // namespace anonym
 
-auto parse_req_tracks(const json& j) -> std::optional<req_tracks>
+auto parse_req_tracks(const json&) -> std::optional<req_tracks>
 {
     return req_tracks{};
 }
@@ -42,7 +42,7 @@ auto parse_req_segment(const json& j) -> std::optional<req_segment>
     if (!is_segment(j))
         return {};
 
-    req_segment req;
+    req_segment req{};
 
     req.track_id   = j["id"];
     req.segment_id = j["seg"];

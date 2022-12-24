@@ -11,11 +11,6 @@ auto to_string(const json& j, const int indent) -> std::string
     return j.dump(indent);
 }
 
-auto from_string(const std::string& s) -> json
-{
-    return json::parse(s);
-}
-
 auto to_bytes(const json& j) -> bln_net::bytes
 {
     return json::to_msgpack(j);

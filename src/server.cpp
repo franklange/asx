@@ -20,7 +20,7 @@ auto server::add_track(track t) -> u16
     m_tracks.push_back(std::move(t));
 
     auto& nt = m_tracks.back();
-    asx_dbg("[add_track]", nt.name, nt.data.size());
+    asx_log("[add_track]", nt.name, nt.data.size());
 
     return id;
 }

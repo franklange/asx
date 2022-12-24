@@ -49,7 +49,7 @@ auto to_json(const tracks& ts) -> json
     return res;
 }
 
-auto to_json(const segment& s) -> json
+auto to_json(const segment&) -> json
 {
     return {};
 }

@@ -1,12 +1,14 @@
 #pragma once
 
 #include <bln_queue/data_queue.hpp>
+#include <bln_queue/msg_queue.hpp>
 #include <bln_net/udp_socket.hpp>
 
 #include <array>
 #include <chrono>
 #include <cstdint>
 #include <filesystem>
+#include <string>
 #include <vector>
 
 namespace asx {
@@ -40,5 +42,8 @@ using socket  = bln_net::udp::socket;
 using packet  = bln_net::udp::packet;
 using remote  = bln_net::udp::endpoint;
 using timeout = std::chrono::milliseconds;
+
+// ui
+using cmd_queue = bln_queue::msg_queue<std::string>;
 
 } // namespace asx

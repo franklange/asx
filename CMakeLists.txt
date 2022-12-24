@@ -44,6 +44,7 @@ set(ENABLE_PACKAGE_CONFIG OFF)
 set(INSTALL_PKGCONFIG_MODULE OFF)
 add_subdirectory(third_party/libsndfile)
 
+
 # ASX lib
 set(ASX_LIB asx)
 add_library(${ASX_LIB} "")
@@ -74,6 +75,7 @@ target_compile_features(${ASX_LIB} PUBLIC cxx_std_20)
 target_link_libraries(${ASX_LIB} PUBLIC
     bln_log
     bln_net
+    msgpackc-cxx
     nlohmann_json
     portaudio
     sndfile
@@ -90,7 +92,6 @@ set_target_properties(${ASXD} PROPERTIES
 target_compile_features(${ASXD} PUBLIC cxx_std_20)
 target_link_libraries(${ASXD} PUBLIC
     asx
-    msgpackc-cxx
 )
 
 # ASX client
